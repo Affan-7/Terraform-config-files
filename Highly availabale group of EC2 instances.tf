@@ -213,3 +213,12 @@ resource "aws_cloudwatch_metric_alarm" "scale_up_alarm" {
   actions_enabled = true
   alarm_actions   = [aws_autoscaling_policy.scale_up.arn]
 }
+
+resource "aws_autoscaling_policy" "scale_down" {
+  name                   = "asg-scale-down"
+  autoscaling_group_name = aws_autoscaling_group.my_asg.name
+  adjustment_type        = "ChangeInCapacity"
+  scaling_adjustment     = "-1"
+  cooldown               = "300"
+  policy_type            = "SimpleScaling"
+}
