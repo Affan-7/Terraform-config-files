@@ -38,3 +38,15 @@ resource "aws_subnet" "eks_private_us_east_1a" {
     "kubernetes.io/cluster/cluster-name" = "shared"
   }
 }
+
+resource "aws_subnet" "eks_private_us_east_1b" {
+  vpc_id     = aws_vpc.eks_vpc.id
+  cidr_block = "10.0.2.0/24"
+  availability_zone = "us-east-1b"
+
+  tags = {
+    "Name" = "eks_private_us_east_1b"
+    "kubernetes.io/role/internal-elb" = "1"
+    "kubernetes.io/cluster/cluster-name" = "shared"
+  }
+}
