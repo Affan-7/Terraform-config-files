@@ -50,3 +50,12 @@ resource "aws_subnet" "eks_private_us_east_1b" {
     "kubernetes.io/cluster/cluster-name" = "shared"
   }
 }
+
+resource "aws_eip" "eks_nat_eip" {
+  vpc      = true
+  depends_on = [aws_internet_gateway.eks_igw]
+
+  tags = {
+    Name = "eks_nat_eip"
+  }
+}
