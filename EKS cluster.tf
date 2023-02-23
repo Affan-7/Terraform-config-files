@@ -70,3 +70,16 @@ resource "aws_nat_gateway" "eks_nat" {
 
   depends_on = [aws_internet_gateway.eks_igw]
 }
+
+resource "aws_route_table" "eks_private_rt" {
+  vpc_id = aws_vpc.eks_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.eks_nat.id
+  }
+
+  tags = {
+    Name = "eks_private_rt"
+  }
+}
