@@ -118,3 +118,26 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
   role       = aws_iam_role.eks_cluster_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
 }
+
+resource "aws_eks_cluster" "myapp_eks" {
+  name     = "myapp_eks"
+  role_arn = aws_iam_role.eks_cluster_role.arn
+
+  vpc_config {
+    subnet_ids = [
+      aws_subnet.eks_private_us_east_1a.id,
+      aws_subnet.eks_private_us_east_1b.id,
+      aws_subnet.eks_public_us_east_1a.id,
+      aws_subnet.eks_public_us_east_1b.id,
+    ]
+    
+    # endpoint_private_access = true
+    # endpoint_public_access  = true
+  }
+
+  # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
+  # Otherwise, EKS will not be able to properly delete EKS managed EC2 infrastructure such as Security Groups.
+  depends_on = [
+    aws_iam_role_policy_attachment.eks_cluster_policy
+  ]
+}
