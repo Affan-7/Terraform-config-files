@@ -141,3 +141,21 @@ resource "aws_eks_cluster" "myapp_eks" {
     aws_iam_role_policy_attachment.eks_cluster_policy
   ]
 }
+
+resource "aws_iam_role" "eks_nodegroup_role" {
+  name = "eks_nodegroup_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      },
+    ]
+  })
+}
