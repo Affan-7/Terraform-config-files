@@ -159,3 +159,8 @@ resource "aws_iam_role" "eks_nodegroup_role" {
     ]
   })
 }
+
+resource "aws_iam_role_policy_attachment" "eks_worker_node_policy" {
+  role       = aws_iam_role.eks_nodegroup_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+}
